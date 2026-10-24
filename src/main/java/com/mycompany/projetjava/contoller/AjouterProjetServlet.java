@@ -1,4 +1,4 @@
-package com.mycompany.projetjava.contoller;
+package com.mycompany.projetjava.controller;
 
 import com.mycompany.projetjava.dao.AuditDAO;
 import com.mycompany.projetjava.dao.ProjetDAO;
@@ -38,11 +38,14 @@ public class AjouterProjetServlet extends HttpServlet {
             boolean succes = ProjetDAO.insererProjet(code, titre, dateDebut, dateFin, budgetPrevu, statut);
             
             HttpSession session = request.getSession(false);
-            String utilisateur = (session != null && session.getAttribute("utilisateur") != null) 
-                                 ? (String) session.getAttribute("utilisateur") : "Administrateur";
+            int idActeur = 1; 
+            if (session != null && session.getAttribute("idUser") != null) {
+                idActeur = (int) session.getAttribute("idUser");
+            }
             
             if (succes) {
-                AuditDAO.enregistrerAction(utilisateur, "CREATION", "Ajout du projet : " + titre);
+                // Enregistrement de l'audit (Action, Type d'objet, ID de l'objet, ID de l'acteur)
+                AuditDAO.enregistrerAction("CREATION", "Projet", 0, idActeur);
                 response.sendRedirect("projets.jsp?succes=1");
             } else {
                 response.sendRedirect("projets.jsp?erreur=1");

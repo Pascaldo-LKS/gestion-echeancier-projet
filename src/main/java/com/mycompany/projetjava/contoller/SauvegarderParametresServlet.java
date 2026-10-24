@@ -29,13 +29,15 @@ public class SauvegarderParametresServlet extends HttpServlet {
         boolean p3 = ParametreDAO.sauvegarderParametre("seuil_alerte", seuilAlerte);
         boolean p4 = ParametreDAO.sauvegarderParametre("email_notification", emailNotification);
         
-        // Journalisation de l'action dans le journal d'audit
         HttpSession session = request.getSession(false);
-        String utilisateur = (session != null && session.getAttribute("utilisateur") != null) 
-                             ? (String) session.getAttribute("utilisateur") : "Système";
+        int idActeur = 1; 
+        if (session != null && session.getAttribute("idUser") != null) {
+            idActeur = (int) session.getAttribute("idUser");
+        }
         
         if (p1 && p2 && p3 && p4) {
-            AuditDAO.enregistrerAction(utilisateur, "MISE_A_JOUR", "Mise à jour des paramètres du système");
+            // Enregistrement de l'audit (Action, Type d'objet, ID de l'objet, ID de l'acteur)
+            AuditDAO.enregistrerAction("MISE_A_JOUR", "Parametres", 0, idActeur);
             response.sendRedirect("parametres.jsp?succes=1");
         } else {
             response.sendRedirect("parametres.jsp?erreur=1");

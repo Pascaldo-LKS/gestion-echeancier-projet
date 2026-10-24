@@ -32,15 +32,21 @@ public class AjouterActiviteServlet extends HttpServlet {
             
             int projetId = Integer.parseInt(projetIdStr);
             
-            // Appel au DAO avec insertion du poids d'avancement par défaut à 0.0
+            // Insertion de l'activité
             boolean insertionReussie = ActiviteDAO.insererActivite(code, libelle, budgetPrevu, projetId);
             
+            // Récupération de l'ID de l'utilisateur connecté depuis la session (par défaut 1 si non trouvé)
             HttpSession session = request.getSession(false);
-            String utilisateur = (session != null && session.getAttribute("utilisateur") != null) 
-                                 ? (String) session.getAttribute("utilisateur") : "Administrateur";
+            int idActeur = 1; 
+            if (session != null && session.getAttribute("idUser") != null) {
+                idActeur = (int) session.getAttribute("idUser");
+            }
             
             if (insertionReussie) {
-                AuditDAO.enregistrerAction(utilisateur, "CREATION", "Ajout de l'activité : " + libelle);
+                // Enregistrement de l'action dans le journal d'audit (Action, Type d'objet, ID de l'objet, ID de l'acteur)
+                // Note: On met 0 pour l'ID de l'objet créé si on ne le récupère pas immédiatement, ou l'ID réel de l'activité
+                AuditDAO.enregistrerAction("CREATION", "Activite", 0, idActeur);
+                
                 response.sendRedirect("activites.jsp?succes=1");
             } else {
                 response.sendRedirect("activites.jsp?erreur=1");

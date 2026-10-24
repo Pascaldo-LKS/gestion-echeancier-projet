@@ -14,8 +14,8 @@
 
     <div class="main-content">
         <div class="dashboard-header">
-            <h2> Journal d'Audit & Traçabilité</h2>
-            <div class="user-badge"> <%= session.getAttribute("utilisateur") != null ? session.getAttribute("utilisateur") : "Administrateur" %></div>
+            <h2>Journal d'Audit & Traçabilité</h2>
+            <div class="user-badge"><%= session.getAttribute("utilisateur") != null ? session.getAttribute("utilisateur") : "Administrateur" %></div>
         </div>
 
         <div class="card">
@@ -24,10 +24,9 @@
             <table>
                 <thead>
                     <tr>
-                      <!--  <th>ID</th> -->
                         <th>Utilisateur</th>
                         <th>Action</th>
-                        <th>Description</th>
+                        <th>Type d'objet</th>
                         <th>Date & Heure</th>
                     </tr>
                 </thead>
@@ -38,18 +37,17 @@
                             for (String[] log : logs) {
                     %>
                     <tr>
-                      <!--  <td><%= log[0] %></td> -->
-                        <td><strong><%= log[1] %></strong></td>
-                        <td><span class="badge" style="background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px;"><%= log[2] %></span></td>
+                        <td><strong><%= log[4] %></strong></td>
+                        <td><span class="badge" style="background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px;"><%= log[1] %></span></td>
+                        <td><%= log[2] %></td>
                         <td><%= log[3] %></td>
-                        <td><%= log[4] %></td>
                     </tr>
                     <%
                             }
                         } else {
                     %>
                     <tr>
-                        <td colspan="5" class="text-center">Aucune action enregistrée dans le journal d'audit.</td>
+                        <td colspan="4" class="text-center">Aucune action enregistrée dans le journal d'audit.</td>
                     </tr>
                     <%
                         }

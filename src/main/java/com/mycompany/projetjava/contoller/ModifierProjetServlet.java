@@ -34,11 +34,14 @@ public class ModifierProjetServlet extends HttpServlet {
             boolean succes = ProjetDAO.modifierProjet(id, titre, dateDebut, dateFin, budgetPrevu, statut);
             
             HttpSession session = request.getSession(false);
-            String utilisateur = (session != null && session.getAttribute("utilisateur") != null) 
-                                 ? (String) session.getAttribute("utilisateur") : "Administrateur";
+            int idActeur = 1; 
+            if (session != null && session.getAttribute("idUser") != null) {
+                idActeur = (int) session.getAttribute("idUser");
+            }
             
             if (succes) {
-                AuditDAO.enregistrerAction(utilisateur, "MODIFICATION", "Modification du projet ID : " + id);
+                // Enregistrement de l'audit (Action, Type d'objet, ID de l'objet, ID de l'acteur)
+                AuditDAO.enregistrerAction("MODIFICATION", "Projet", id, idActeur);
                 response.sendRedirect("projets.jsp?succes=modif");
             } else {
                 response.sendRedirect("projets.jsp?erreur=modif");

@@ -22,11 +22,14 @@ public class SupprimerUtilisateurServlet extends HttpServlet {
             boolean succes = GestionUtilisateurDAO.supprimerUtilisateur(id);
             
             HttpSession session = request.getSession(false);
-            String utilisateur = (session != null && session.getAttribute("utilisateur") != null) 
-                                 ? (String) session.getAttribute("utilisateur") : "Administrateur";
+            int idActeur = 1; 
+            if (session != null && session.getAttribute("idUser") != null) {
+                idActeur = (int) session.getAttribute("idUser");
+            }
             
             if (succes) {
-                AuditDAO.enregistrerAction(utilisateur, "SUPPRESSION", "Suppression de l'utilisateur ID: " + id);
+                // Enregistrement de l'audit (Action, Type d'objet, ID de l'objet, ID de l'acteur)
+                AuditDAO.enregistrerAction("SUPPRESSION", "Utilisateur", id, idActeur);
                 response.sendRedirect("utilisateurs.jsp?succes_suppr=1");
             } else {
                 response.sendRedirect("utilisateurs.jsp?erreur=suppr");
