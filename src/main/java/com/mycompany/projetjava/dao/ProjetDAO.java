@@ -51,7 +51,6 @@ public class ProjetDAO {
              ResultSet rs = pstmt.executeQuery()) {
             
             while (rs.next()) {
-                // Tableau de 7 éléments (indices 0 à 6)
                 String[] projet = new String[7];
                 projet[0] = String.valueOf(rs.getInt("id"));
                 projet[1] = rs.getString("code");
@@ -71,7 +70,6 @@ public class ProjetDAO {
         return listeProjets;
     }
 
-    // NOUVELLE MÉTHODE : Modification d'un projet existant
     public static boolean modifierProjet(int id, String titre, String dateDebut, String dateFin, double budgetPrevu, String statut) {
         String sql = "UPDATE projet SET titre = ?, date_debut_prevue = ?, date_fin_prevue = ?, budget_prevu = ?, statut = ? WHERE id = ?";
         

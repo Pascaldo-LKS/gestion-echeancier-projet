@@ -1,4 +1,4 @@
-package com.mycompany.projetjava.controller;
+package com.mycompany.projetjava.contoller;
 
 import com.mycompany.projetjava.dao.AuditDAO;
 import com.mycompany.projetjava.dao.ProjetDAO;
@@ -24,15 +24,11 @@ public class AjouterProjetServlet extends HttpServlet {
             String dateDebut = request.getParameter("date_debut");
             String dateFin = request.getParameter("date_fin");
             String statut = request.getParameter("statut");
-            double budgetPrevu = 0.0;
+            String code = request.getParameter("code");
             
+            double budgetPrevu = 0.0;
             if (request.getParameter("budget_prevu") != null && !request.getParameter("budget_prevu").isEmpty()) {
                 budgetPrevu = Double.parseDouble(request.getParameter("budget_prevu"));
-            }
-            
-            String code = request.getParameter("code");
-            if (code == null || code.trim().isEmpty()) {
-                code = "PRJ-" + (System.currentTimeMillis() % 100000);
             }
             
             boolean succes = ProjetDAO.insererProjet(code, titre, dateDebut, dateFin, budgetPrevu, statut);
@@ -44,7 +40,6 @@ public class AjouterProjetServlet extends HttpServlet {
             }
             
             if (succes) {
-                // Enregistrement de l'audit (Action, Type d'objet, ID de l'objet, ID de l'acteur)
                 AuditDAO.enregistrerAction("CREATION", "Projet", 0, idActeur);
                 response.sendRedirect("projets.jsp?succes=1");
             } else {

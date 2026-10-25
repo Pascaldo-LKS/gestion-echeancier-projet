@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Gestion des Projets</title>
+    <title>Gestion des Projets - Pascal'do Solut</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -15,7 +15,7 @@
     <div class="main-content">
         <div class="dashboard-header">
             <h2>Gestion des Projets</h2>
-            <div class="user-badge"> <%= session.getAttribute("utilisateur") != null ? session.getAttribute("utilisateur") : "Administrateur" %></div>
+            <div class="user-badge"><%= session.getAttribute("utilisateur") != null ? session.getAttribute("utilisateur") : "Administrateur" %></div>
         </div>
 
         <% if ("1".equals(request.getParameter("succes"))) { %>
@@ -33,8 +33,8 @@
             <form action="AjouterProjetServlet" method="POST">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>Code Projet (facultatif) :</label>
-                        <input type="text" name="code" placeholder="Ex: PRJ-2026-01">
+                        <label>Code Projet :</label>
+                        <input type="text" name="code" required placeholder="Ex: PRJ-2026-01">
                     </div>
 
                     <div class="form-group">
@@ -79,7 +79,6 @@
             <table>
                 <thead>
                     <tr>
-                       <!-- <th>ID</th> -->
                         <th>Code</th>
                         <th>Titre</th>
                         <th>Début</th>
@@ -96,7 +95,6 @@
                             for (String[] p : projets) {
                     %>
                     <tr>
-                      <!--  <td><%= p[0] %></td> -->
                         <td><strong><%= p[1] %></strong></td>
                         <td><%= p[2] %></td>
                         <td><%= p[3] %></td>
@@ -106,13 +104,12 @@
                         <td>
                             <a href="SupprimerProjetServlet?id=<%= p[0] %>" 
                                onclick="return confirm('Voulez-vous vraiment supprimer ce projet ?');" 
-                               style="color: #ef4444; text-decoration: none; font-weight: bold;">
+                               style="color: #ef4444; text-decoration: none; font-weight: bold; margin-right: 10px;">
                                 Supprimer
                             </a>
-                               <a href="detail_projet.jsp?id=<%= p[0] %>" style="background-color: #f59e0b; color: #111827; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
+                            <a href="detail_projet.jsp?id=<%= p[0] %>" style="background-color: #f59e0b; color: #111827; padding: 6px 12px; border-radius: 4px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
                                 Voir le Suivi & Analyses
                             </a>
-
                         </td>
                     </tr>
                     <%
@@ -120,14 +117,13 @@
                         } else {
                     %>
                     <tr>
-                        <td colspan="8" class="text-center">Aucun projet enregistré.</td>
+                        <td colspan="7" class="text-center">Aucun projet enregistré.</td>
                     </tr>
                     <%
                         }
                     %>
                 </tbody>
             </table>
-                
             </div>
         </div>
     </div>

@@ -1,16 +1,14 @@
 package com.mycompany.projetjava.contoller;
 
-import com.mycompany.projetjava.config.DatabaseConnection;
+import com.mycompany.projetjava.dao.AuditDAO;
+import com.mycompany.projetjava.dao.SuiviPhysiqueDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet(name = "AjouterSuiviServlet", urlPatterns = {"/AjouterSuiviServlet"})
 public class AjouterSuiviServlet extends HttpServlet {
@@ -20,44 +18,47 @@ public class AjouterSuiviServlet extends HttpServlet {
             throws ServletException, IOException {
         
         request.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html;charset=UTF-8");
         
         String activiteIdStr = request.getParameter("activiteId");
         String dateSuivi = request.getParameter("dateSuivi");
         String tauxStr = request.getParameter("tauxAvancement");
+        String qtePrevueStr = request.getParameter("quantitePrevue");
+        String qteRealiseeStr = request.getParameter("quantiteRealisee");
+        String statutValidation = request.getParameter("statutValidation");
         String description = request.getParameter("description");
         
-        try (PrintWriter out = response.getWriter()) {
+        try {
             int activiteId = Integer.parseInt(activiteIdStr);
             double tauxAvancement = Double.parseDouble(tauxStr);
             
-            // On ajoute id_auteur (fixé à 1 par défaut pour éviter la violation NOT NULL)
-            String sql = "INSERT INTO suivi_physique (id_activite, date_constat, taux_avancement, commentaire, id_auteur) VALUES (?, ?, ?, ?, ?)";
+            Double quantitePrevue = null;
+            if (qtePrevueStr != null && !qtePrevueStr.trim().isEmpty()) {
+                quantitePrevue = Double.parseDouble(qtePrevueStr);
+            }
             
-            try (Connection conn = DatabaseConnection.getConnection();
-                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-                
-                pstmt.setInt(1, activiteId);
-                if (dateSuivi != null && !dateSuivi.trim().isEmpty()) {
-                    pstmt.setDate(2, java.sql.Date.valueOf(dateSuivi));
-                } else {
-                    pstmt.setDate(2, new java.sql.Date(System.currentTimeMillis()));
-                }
-                pstmt.setDouble(3, tauxAvancement);
-                pstmt.setString(4, description);
-                pstmt.setInt(5, 1); // ID de l'auteur par défaut (ex: 1)
-                
-                pstmt.executeUpdate();
+            Double quantiteRealisee = null;
+            if (qteRealiseeStr != null && !qteRealiseeStr.trim().isEmpty()) {
+                quantiteRealisee = Double.parseDouble(qteRealiseeStr);
+            }
+            
+            HttpSession session = request.getSession(false);
+            int idActeur = 1; 
+            if (session != null && session.getAttribute("idUser") != null) {
+                idActeur = (int) session.getAttribute("idUser");
+            }
+            
+            boolean succes = SuiviPhysiqueDAO.insererSuivi(activiteId, dateSuivi, tauxAvancement, quantitePrevue, quantiteRealisee, statutValidation, description, idActeur);
+            
+            if (succes) {
+                AuditDAO.enregistrerAction("CREATION", "Suivi Physique", 0, idActeur);
                 response.sendRedirect("suivi_physique.jsp?succes=1");
-                
-            } catch (SQLException e) {
-                out.println("<h2>ERREUR SQL EXACTE (SUIVI PHYSIQUE) :</h2>");
-                out.println("<p style='color:red; font-weight:bold;'>" + e.getMessage() + "</p>");
-                out.println("<br><a href='suivi_physique.jsp'>Retour</a>");
+            } else {
+                response.sendRedirect("suivi_physique.jsp?erreur=1");
             }
             
         } catch (Exception e) {
-            response.getWriter().println("Erreur : " + e.getMessage());
+            e.printStackTrace();
+            response.sendRedirect("suivi_physique.jsp?erreur=format");
         }
     }
 }

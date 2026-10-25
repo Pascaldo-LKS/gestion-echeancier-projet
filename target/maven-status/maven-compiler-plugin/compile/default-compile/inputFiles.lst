@@ -1,5 +1,7 @@
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\config\DatabaseConnection.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\AjouterActiviteServlet.java
+D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\AjouterAffectationServlet.java
+D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\AjouterAlerteServlet.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\AjouterDepenseServlet.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\AjouterProjetServlet.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\AjouterSuiviServlet.java
@@ -10,6 +12,8 @@ D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\SupprimerProjetServlet.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\contoller\SupprimerUtilisateurServlet.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\dao\ActiviteDAO.java
+D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\dao\AffectationDAO.java
+D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\dao\AlerteDAO.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\dao\AuditDAO.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\dao\DashboardDAO.java
 D:\NetBeansProjects\projetJava\src\main\java\com\mycompany\projetjava\dao\DepenseDAO.java

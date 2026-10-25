@@ -10,7 +10,7 @@
     --sidebar-bg: #111827;
     --sidebar-brand-bg: #0b0f19;
     --text-color: #1f2937;
-    --accent-color: #f59e0b; 
+    --accent-color: #d97706; 
     --white: #ffffff;
     --transition: all 0.3s ease;
 }
@@ -58,11 +58,21 @@ body {
     padding: 25px 20px;
     background-color: var(--sidebar-brand-bg);
     border-bottom: 1px solid #1f2937;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.sidebar-brand img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 50%;
 }
 
 .sidebar-brand h2 {
     color: var(--accent-color);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -100,23 +110,31 @@ body {
 
 .sidebar-menu li a:hover {
     color: var(--white);
-    background-color: rgba(245, 158, 11, 0.1);
+    background-color: rgba(217, 119, 6, 0.1);
     border-left-color: var(--accent-color);
 }
 
 .sidebar-menu li a.active {
     color: var(--white);
-    background-color: rgba(245, 158, 11, 0.15);
+    background-color: rgba(217, 119, 6, 0.15);
     border-left-color: var(--accent-color);
     font-weight: 600;
 }
 
-.sidebar-menu li a.logout-link {
-    color: #ef4444 !important;
+.sidebar-logout a {
+    background-color: #ef4444;
+    color: var(--white) !important;
+    display: block;
+    margin: 15px 20px;
+    padding: 10px;
+    text-align: center;
+    border-radius: 6px;
+    font-weight: bold;
+    text-decoration: none;
 }
-.sidebar-menu li a.logout-link:hover {
-    background-color: rgba(239, 68, 68, 0.1);
-    border-left-color: #ef4444;
+.sidebar-logout a:hover {
+    background-color: #dc2626 !important;
+    border-left-color: transparent !important;
 }
 
 .main-content {
@@ -199,7 +217,6 @@ body {
     color: #9ca3af;
 }
 
-/* --- CONTENEUR RESPONSIVE POUR TABLEAUX --- */
 .card {
     background: var(--white);
     padding: 20px;
@@ -207,7 +224,7 @@ body {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     margin-bottom: 25px;
     width: 100%;
-    overflow: hidden; /* Empêche la carte de déborder */
+    overflow: hidden;
 }
 
 .card h3 {
@@ -218,19 +235,35 @@ body {
     padding-bottom: 8px;
 }
 
-/* Enveloppe scrollable pour mobile */
 .table-responsive {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     margin-top: 10px;
 }
+.form-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--accent-color);
+    cursor: pointer;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+
+.form-group div[style*="margin-top"] {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-top: 5px;
+    font-weight: 500;
+    color: #374151;
+}
 
 table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
-    white-space: nowrap; /* Empêche le texte de se couper bizarrement */
+    white-space: nowrap;
 }
 
 table th {
@@ -286,7 +319,7 @@ table tbody tr:hover {
 .form-group input:focus, 
 .form-group select:focus {
     border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
 }
 
 button[type="submit"], .btn-submit {
@@ -303,7 +336,7 @@ button[type="submit"], .btn-submit {
 
 button[type="submit"]:hover, .btn-submit:hover {
     background-color: var(--accent-color);
-    color: var(--sidebar-bg);
+    color: var(--white);
 }
 
 .login-body {
@@ -327,11 +360,34 @@ button[type="submit"]:hover, .btn-submit:hover {
     margin: 20px;
 }
 
+/* Style spécifique pour aligner le logo et le nom à gauche sur la page de connexion */
+.login-container .login-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.login-container .login-brand img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.login-container .login-brand h3 {
+    margin: 0;
+    color: var(--accent-color);
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
 .login-container h2 {
-    text-align: center;
+    text-align: left;
     color: #111827;
     margin-bottom: 20px;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 }
 
 .login-container .form-group {
@@ -344,7 +400,6 @@ button[type="submit"]:hover, .btn-submit:hover {
     padding: 12px;
 }
 
-/* --- RESPONSIVITÉ AMÉLIORÉE (Tablettes et Téléphones) --- */
 @media (max-width: 768px) {
     .menu-toggle {
         display: block;
@@ -362,7 +417,7 @@ button[type="submit"]:hover, .btn-submit:hover {
         margin-left: 0;
         width: 100%;
         padding: 15px 12px;
-        padding-top: 70px; /* Espace pour le bouton menu fixe */
+        padding-top: 70px;
     }
 
     .dashboard-header {
@@ -376,12 +431,12 @@ button[type="submit"]:hover, .btn-submit:hover {
     }
 
     .kpi-container {
-        grid-template-columns: 1fr; /* Les cartes KPI s'empilent une par une sur mobile */
+        grid-template-columns: 1fr;
         gap: 12px;
     }
 
     .form-grid {
-        grid-template-columns: 1fr; /* Les champs de formulaire passent sur une seule colonne */
+        grid-template-columns: 1fr;
     }
 
     .card {

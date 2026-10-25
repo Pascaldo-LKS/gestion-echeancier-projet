@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Gestion des Activités</title>
+    <title>Gestion des Activités - Pascal'do Solut</title>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
@@ -40,8 +40,32 @@
                     </div>
                     
                     <div class="form-group">
+                        <label>Date Début Prévue :</label>
+                        <input type="date" name="dateDebutPrevue" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Date Fin Prévue :</label>
+                        <input type="date" name="dateFinPrevue" required>
+                    </div>
+                    
+                    <div class="form-group">
                         <label>Budget Prévu (FCFA) :</label>
                         <input type="number" step="0.01" name="budgetPrevu" required placeholder="Ex: 500000">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Poids d'Avancement (%) :</label>
+                        <input type="number" step="0.01" name="poidsAvancement" required value="0.00" placeholder="Ex: 0">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Statut :</label>
+                        <select name="statut" required>
+                            <option value="Planifié">Planifié</option>
+                            <option value="En cours">En cours</option>
+                            <option value="Terminé">Terminé</option>
+                        </select>
                     </div>
                     
                     <div class="form-group">
@@ -74,10 +98,13 @@
             <table>
                 <thead>
                     <tr>
-                     
                         <th>Code</th>
                         <th>Libellé</th>
+                        <th>Date Début</th>
+                        <th>Date Fin</th>
                         <th>Budget Prévu (FCFA)</th>
+                        <th>Poids (%)</th>
+                        <th>Statut</th>
                         <th>Projet Associé</th>
                     </tr>
                 </thead>
@@ -88,18 +115,21 @@
                             for (String[] act : activites) {
                     %>
                     <tr>
-                        
                         <td><%= act[1] %></td>
                         <td><%= act[2] %></td>
                         <td><%= act[3] %></td>
-                        <td><strong><%= act[4] %></strong></td>
+                        <td><%= act[4] %></td>
+                        <td><%= act[5] %></td>
+                        <td><%= act[6] %></td>
+                        <td><%= act[7] %></td>
+                        <td><strong><%= act[8] %></strong></td>
                     </tr>
                     <%
                             }
                         } else {
                     %>
                     <tr>
-                        <td colspan="5" class="text-center">Aucune activité enregistrée.</td>
+                        <td colspan="8" class="text-center">Aucune activité enregistrée.</td>
                     </tr>
                     <%
                         }

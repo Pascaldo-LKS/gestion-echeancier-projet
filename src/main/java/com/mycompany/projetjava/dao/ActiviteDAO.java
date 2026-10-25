@@ -10,20 +10,29 @@ import java.util.List;
 
 public class ActiviteDAO {
 
-   public static boolean insererActivite(String code, String libelle, double budgetPrevu, int projetId) {
-        // On renseigne id_projet, projet_id et poids_avancement pour respecter toutes les contraintes NOT NULL
-        String sql = "INSERT INTO activite (code, libelle, budget_prevu, id_projet, projet_id, poids_avancement, statut) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public static boolean insererActivite(String code, String libelle, String dateDebutPrevue, String dateFinPrevue, double budgetPrevu, double poidsAvancement, String statut, int projetId) {
+        String sql = "INSERT INTO activite (code, libelle, date_debut_prevue, date_fin_prevue, budget_prevu, poids_avancement, statut, id_projet, projet_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
             pstmt.setString(1, code);
             pstmt.setString(2, libelle);
-            pstmt.setDouble(3, budgetPrevu);
-            pstmt.setInt(4, projetId);
-            pstmt.setInt(5, projetId);
-            pstmt.setDouble(6, 0.0); // Poids d'avancement initial par défaut
-            pstmt.setString(7, "Planifié"); // Statut par défaut
+            if (dateDebutPrevue != null && !dateDebutPrevue.trim().isEmpty()) {
+                pstmt.setDate(3, java.sql.Date.valueOf(dateDebutPrevue));
+            } else {
+                pstmt.setNull(3, java.sql.Types.DATE);
+            }
+            if (dateFinPrevue != null && !dateFinPrevue.trim().isEmpty()) {
+                pstmt.setDate(4, java.sql.Date.valueOf(dateFinPrevue));
+            } else {
+                pstmt.setNull(4, java.sql.Types.DATE);
+            }
+            pstmt.setDouble(5, budgetPrevu);
+            pstmt.setDouble(6, poidsAvancement);
+            pstmt.setString(7, statut);
+            pstmt.setInt(8, projetId);
+            pstmt.setInt(9, projetId);
             
             return pstmt.executeUpdate() > 0;
             
@@ -32,10 +41,11 @@ public class ActiviteDAO {
             e.printStackTrace();
             return false;
         }
-    } // Méthode pour lister toutes les activités avec le titre du projet associé
+    }
+
     public static List<String[]> listerActivites() {
         List<String[]> listeActivites = new ArrayList<>();
-        String sql = "SELECT a.id, a.code, a.libelle, a.budget_prevu, p.titre AS projet_titre " +
+        String sql = "SELECT a.id, a.code, a.libelle, a.date_debut_prevue, a.date_fin_prevue, a.budget_prevu, a.poids_avancement, a.statut, p.titre AS projet_titre " +
                      "FROM activite a LEFT JOIN projet p ON a.id_projet = p.id ORDER BY a.id DESC";
         
         try (Connection conn = DatabaseConnection.getConnection();
@@ -43,12 +53,16 @@ public class ActiviteDAO {
              ResultSet rs = pstmt.executeQuery()) {
             
             while (rs.next()) {
-                String[] activite = new String[5];
+                String[] activite = new String[9];
                 activite[0] = String.valueOf(rs.getInt("id"));
                 activite[1] = rs.getString("code");
                 activite[2] = rs.getString("libelle");
-                activite[3] = String.valueOf(rs.getDouble("budget_prevu"));
-                activite[4] = rs.getString("projet_titre") != null ? rs.getString("projet_titre") : "Aucun";
+                activite[3] = rs.getDate("date_debut_prevue") != null ? rs.getDate("date_debut_prevue").toString() : "";
+                activite[4] = rs.getDate("date_fin_prevue") != null ? rs.getDate("date_fin_prevue").toString() : "";
+                activite[5] = String.valueOf(rs.getDouble("budget_prevu"));
+                activite[6] = String.valueOf(rs.getDouble("poids_avancement"));
+                activite[7] = rs.getString("statut");
+                activite[8] = rs.getString("projet_titre") != null ? rs.getString("projet_titre") : "Aucun";
                 
                 listeActivites.add(activite);
             }

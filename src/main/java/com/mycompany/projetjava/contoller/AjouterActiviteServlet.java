@@ -21,7 +21,11 @@ public class AjouterActiviteServlet extends HttpServlet {
         
         String code = request.getParameter("code");
         String libelle = request.getParameter("libelle");
+        String dateDebutPrevue = request.getParameter("dateDebutPrevue");
+        String dateFinPrevue = request.getParameter("dateFinPrevue");
         String budgetPrevuStr = request.getParameter("budgetPrevu");
+        String poidsAvancementStr = request.getParameter("poidsAvancement");
+        String statut = request.getParameter("statut");
         String projetIdStr = request.getParameter("projetId");
         
         try {
@@ -30,12 +34,15 @@ public class AjouterActiviteServlet extends HttpServlet {
                 budgetPrevu = Double.parseDouble(budgetPrevuStr);
             }
             
+            double poidsAvancement = 0.0;
+            if (poidsAvancementStr != null && !poidsAvancementStr.trim().isEmpty()) {
+                poidsAvancement = Double.parseDouble(poidsAvancementStr);
+            }
+            
             int projetId = Integer.parseInt(projetIdStr);
             
-            // Insertion de l'activité
-            boolean insertionReussie = ActiviteDAO.insererActivite(code, libelle, budgetPrevu, projetId);
+            boolean insertionReussie = ActiviteDAO.insererActivite(code, libelle, dateDebutPrevue, dateFinPrevue, budgetPrevu, poidsAvancement, statut, projetId);
             
-            // Récupération de l'ID de l'utilisateur connecté depuis la session (par défaut 1 si non trouvé)
             HttpSession session = request.getSession(false);
             int idActeur = 1; 
             if (session != null && session.getAttribute("idUser") != null) {
@@ -43,10 +50,7 @@ public class AjouterActiviteServlet extends HttpServlet {
             }
             
             if (insertionReussie) {
-                // Enregistrement de l'action dans le journal d'audit (Action, Type d'objet, ID de l'objet, ID de l'acteur)
-                // Note: On met 0 pour l'ID de l'objet créé si on ne le récupère pas immédiatement, ou l'ID réel de l'activité
                 AuditDAO.enregistrerAction("CREATION", "Activite", 0, idActeur);
-                
                 response.sendRedirect("activites.jsp?succes=1");
             } else {
                 response.sendRedirect("activites.jsp?erreur=1");
